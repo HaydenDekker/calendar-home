@@ -19,7 +19,9 @@ import java.util.Optional;
 @Tag("vcf-nav-item")
 public class AppNavItem extends Component {
 
-    /**
+    private static final long serialVersionUID = -2244908411347638577L;
+
+	/**
      * Creates a menu item which does not link to any view but only shows the given
      * label.
      * 

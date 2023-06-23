@@ -13,7 +13,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 @Route(value = "about", layout = MainLayout.class)
 public class AboutView extends VerticalLayout {
 
-    public AboutView() {
+    private static final long serialVersionUID = 3169619900090560685L;
+
+	public AboutView() {
         setSpacing(false);
 
         Image img = new Image("images/empty-plant.png", "placeholder plant");

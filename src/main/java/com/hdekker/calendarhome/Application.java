@@ -16,7 +16,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Theme(value = "calendarhome")
 public class Application implements AppShellConfigurator {
 
-    public static void main(String[] args) {
+    private static final long serialVersionUID = -4336210821702850507L;
+
+	public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 

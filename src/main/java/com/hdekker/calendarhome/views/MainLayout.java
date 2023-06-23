@@ -21,7 +21,8 @@ import org.vaadin.lineawesome.LineAwesomeIcon;
  */
 public class MainLayout extends AppLayout {
 
-    private H2 viewTitle;
+    private static final long serialVersionUID = -4665897232979877637L;
+	private H2 viewTitle;
 
     public MainLayout() {
         setPrimarySection(Section.DRAWER);

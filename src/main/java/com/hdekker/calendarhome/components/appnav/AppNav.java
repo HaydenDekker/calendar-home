@@ -21,7 +21,9 @@ import java.util.Optional;
 @NpmPackage(value = "@vaadin-component-factory/vcf-nav", version = "1.0.6")
 public class AppNav extends Component implements HasSize, HasStyle {
 
-    /**
+    private static final long serialVersionUID = -1255348794191753382L;
+
+	/**
      * Creates a new menu without any label.
      */
     public AppNav() {
