@@ -17,6 +17,9 @@ public class AuthorisationEndpoint {
 				@RequestParam("state") String state
 			) {
 		log.info("Authorisation code received.");
+		
+		
+		
 	}
 	
 }

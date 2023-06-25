@@ -1,5 +1,6 @@
 package com.hdekker.calendarhome.outlook;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -52,9 +53,9 @@ public class SecurityTest {
 	@Autowired
 	OauthClientWebClient webClient;
 
-	@DisplayName("When a response is given from the Auth server to the response URI, the app should receive the code and should be able to decode the response.")
+	@DisplayName("When a response is given from the Auth server to the response URI, the app should receive the code.")
 	@Test
-	public void whenAuthorisationResponseGiven_ExpectCodeOrErrorIsRead() {
+	public void whenAuthorisationResponseGiven_ExpectMessageIsReceived() {
 		
 		WebClient client = webClient.testClient()
 			.baseUrl("https://localhost:8080/calendar-auth-resp")
@@ -72,6 +73,23 @@ public class SecurityTest {
 			.block();
 		
 		assertThat(status.value(), equalTo(200));
+		
+	}
+	
+	@DisplayName("If an error is sent from the authorisation service, we need to receive it.")
+	@Disabled("Defer - Error Handling.")
+	@Test
+	public void whenAuthorisationResponseErrorGiven_ExpectErrorIsReceived() {
+		
+	}
+	
+	@DisplayName("Once auth received, we need to decode the response.")
+	@Test
+	public void whenAuthorisationReceived_ExpectMarshalledToAuthorisationObject() {
+		
+		Authorisation auth = new Authorisation(code, state);
+		assertThat(auth.code(), equalTo(code));
+		assertThat(auth.state(), equalTo(state));
 		
 	}
 	
