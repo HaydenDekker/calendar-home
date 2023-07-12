@@ -33,17 +33,13 @@ public class AuthRedirect {
 	}
 	
 	@Autowired
-	BasicConfiguration bc;
+	ClientApplication clientApplication;
 	
 	private String getAuthorizationCodeUrl(String registeredRedirectURL, String state, String nonce)
             throws MalformedURLException {
 
         String updatedScopes = "";
         String claims = "";
-
-        PublicClientApplication pca = PublicClientApplication.builder(bc.getClientId())
-        		.authority(bc.getAuthority())
-        		.build();
 
         AuthorizationRequestUrlParameters parameters =
                 AuthorizationRequestUrlParameters
@@ -56,7 +52,8 @@ public class AuthRedirect {
                         .claimsChallenge(claims)
                         .build();
 
-        return pca.getAuthorizationRequestUrl(parameters).toString();
+        return clientApplication.getClientApplication()
+        		.getAuthorizationRequestUrl(parameters).toString();
     }
 	
 }

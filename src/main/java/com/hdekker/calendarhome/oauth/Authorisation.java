@@ -1,4 +1,4 @@
-package com.hdekker.calendarhome.outlook;
+package com.hdekker.calendarhome.oauth;
 
 /***
  * Object as per 
@@ -8,5 +8,5 @@ package com.hdekker.calendarhome.outlook;
  * @author Hayden Dekker
  *
  */
-public record Authorisation (String code, String state) {}
+public record Authorisation (String code, String state, String currentURI) {}
 	

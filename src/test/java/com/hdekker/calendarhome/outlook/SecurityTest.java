@@ -6,25 +6,36 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
+import org.springframework.test.context.ActiveProfiles;
 
-import com.hdekker.calendarhome.sdk.OauthClientWebClient;
+import com.hdekker.calendarhome.oauth.AccesTokenPort;
+import com.hdekker.calendarhome.oauth.AccessToken;
+import com.hdekker.calendarhome.oauth.Authorisation;
+import com.hdekker.calendarhome.oauth.AuthorisationPort;
+import com.hdekker.calendarhome.sdk.AuthCodeSupplier;
 
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.when;
 
+import java.net.URISyntaxException;
+import java.time.Duration;
+import java.time.LocalDate;
+
+@ActiveProfiles("auth-system-test")
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class SecurityTest {
 	
 	Logger log = LoggerFactory.getLogger(SecurityTest.class);
 
-	static final String REDIRECT_URL = "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize";
+	@Value("${test.security.redirect-url}")
+	String REDIRECT_URL;
 	
 	@Autowired
 	AuthRedirect authRedirect;
@@ -35,6 +46,7 @@ public class SecurityTest {
 	 * 
 	 * 
 	 */
+	@DisplayName("Need to redirect user when they're subscribing.")
 	@Test
 	public void whenSubscribing_ExpectRedirectToMicrosoftAuth() {
 		
@@ -46,35 +58,18 @@ public class SecurityTest {
 		
 	}
 	
-	String authResponseStub = "https://localhost:8080/calendar-auth-resp?code=M.C105_BAY.2.9561f489-28e7-e342-a443-e11f5e179474&state=7af249ed-9724-4d5c-b737-f1a8428c5bb2";
-	String code = "M.C105_BAY.2.9561f489-28e7-e342-a443-e11f5e179474";
-	String state = "7af249ed-9724-4d5c-b737-f1a8428c5bb2";
+	@Value("${test.security.stubs.auth-response}")
+	String authResponse;
 	
 	@Autowired
-	OauthClientWebClient webClient;
+	AuthCodeSupplier authCodeSupplier;
+	
 
-	@DisplayName("When a response is given from the Auth server to the response URI, the app should receive the code.")
-	@Test
-	public void whenAuthorisationResponseGiven_ExpectMessageIsReceived() {
-		
-		WebClient client = webClient.testClient()
-			.baseUrl("https://localhost:8080/calendar-auth-resp")
-			.build();
-		
-		HttpStatusCode status = client.get()
-			.uri(b->
-				b.queryParam("code", code)
-					.queryParam("state", state)
-					.build()
-			)
-			.exchangeToMono(cr->
-				Mono.just(cr.statusCode())
-			)
-			.block();
-		
-		assertThat(status.value(), equalTo(200));
-		
-	}
+	@Value("${test.security.stubs.code}")
+	String code;
+
+	@Value("${test.security.stubs.state}")
+	String state;
 	
 	@DisplayName("If an error is sent from the authorisation service, we need to receive it.")
 	@Disabled("Defer - Error Handling.")
@@ -83,27 +78,74 @@ public class SecurityTest {
 		
 	}
 	
-	@DisplayName("Once auth received, we need to decode the response.")
+	@DisplayName("Once auth received, we need to extract the response.")
 	@Test
 	public void whenAuthorisationReceived_ExpectMarshalledToAuthorisationObject() {
 		
-		Authorisation auth = new Authorisation(code, state);
+		Authorisation auth = new Authorisation(code, state, Endpoints.authorisation);
 		assertThat(auth.code(), equalTo(code));
 		assertThat(auth.state(), equalTo(state));
-		
+
 	}
 	
+	@Autowired
+	AuthorisationPort authorisationPort;
+	
+	@Autowired
+	AccesTokenPort accessTokenPort;
+	
+
+	/**
+	 * Asserts the api can accept auth codes 
+	 * and then the application automatically 
+	 * retrieves the access tokens.
+	 * 
+	 * 
+	 * @throws URISyntaxException 
+	 * @throws InterruptedException 
+	 * 
+	 * 
+	 */
+	@DisplayName("After auth is received, need to exchange for access tokens.")
 	@Test
-	public void whenUserConnectsCalendar_ExpectTokenStored() {
+	public void givenAuthCode_ObtainsUserAccessInfo() throws URISyntaxException, InterruptedException {
+
+		log.info(authorisationPort.accesTokenPort.toString() + " used by auth port.");
 		
+		when(accessTokenPort.getAccess(new Authorisation(code, state, Endpoints.authorisation)))
+			.thenReturn(Mono.just(new AccessToken("Random", "Me", "Some,Scopes", LocalDate.now())));
+		
+		Mono<AccessToken> atMono = Mono.create(s->{
+			
+			authorisationPort.listenForTokens(at->{
+				
+				log.info("Received an access token with token value - " + at.accessToken());
+				s.success(at);
+				
+			});
+			
+			log.info("Calling auth api using test sdk.");
+			authCodeSupplier.sendAuthorisationMessage(code, state);
+			
+		});
+		
+		AccessToken receivedAccessToken = atMono.take(Duration.ofSeconds(5))
+				.publishOn(Schedulers.newBoundedElastic(10, 10, "auth-system-test"))
+				.block();
+		
+		assertThat(receivedAccessToken, notNullValue());
 		
 	}
 	
+	@Disabled
+	// TODO renew tokens after expiry
 	@Test
 	public void whenTokenDueForExpiry_ExpectAppRenewsToken() {
 		
 	}
 	
+	@Disabled()
+	// TODO communicate exceptions
 	@Test
 	public void whenTokenFails_ExpectAppNotifiesUser() {
 		

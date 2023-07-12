@@ -9,7 +9,7 @@ SecurityTest -
 - (Complete) Redirect user to Microsoft OAuth server.
 - (Complete) Receive Microsoft OAuth Authorisation codes.
 - (Complete) Marshal Authorisation Response to Authorisation object.
-- Request Tokens, Credentials and Refresh.
+- (Complete) Request Tokens; Credentials and Refresh.
 - Store Refresh token.
 - Set access tokens that app should utilise.
 - Detect failure if access token no longer valid.

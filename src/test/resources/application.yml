@@ -1,0 +1,9 @@
+test:
+  security:
+    stubs:
+      auth-response: https://localhost:8080/calendar-auth-resp?code=M.C105_BAY.2.9561f489-28e7-e342-a443-e11f5e179474&state=7af249ed-9724-4d5c-b737-f1a8428c5bb2
+      code: M.C105_BAY.2.34d5b0bf-48a9-82f5-9cb1-c01bf77e98df 
+      # M.C105_BAY.2.10c4d2d7-82af-5e9a-42d3-37e6800e4ca1
+      # M.C105_BAY.2.9561f489-28e7-e342-a443-e11f5e179474
+      state: 7af249ed-9724-4d5c-b737-f1a8428c5bb2
+    redirect-url: https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize
