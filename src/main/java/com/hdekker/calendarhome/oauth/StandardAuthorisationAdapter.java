@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hdekker.calendarhome.outlook.Endpoints;
-
 @RestController
 public class StandardAuthorisationAdapter {
 	
@@ -24,7 +22,7 @@ public class StandardAuthorisationAdapter {
 			) {
 		
 		log.info("Obtaining access tokens.");
-		authorisationPort.getAccessTokens(new Authorisation(code, state, Endpoints.authorisation));
+		authorisationPort.getAccessTokens(new Authorisation(code, state));
 		
 	}
 	

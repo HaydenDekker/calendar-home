@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.hdekker.calendarhome.oauth.AccesTokenPort;
+import com.hdekker.calendarhome.oauth.AuthenticationPort;
 import com.hdekker.calendarhome.oauth.AccessToken;
 import com.hdekker.calendarhome.oauth.Authorisation;
 import com.hdekker.calendarhome.oauth.AuthorisationPort;
@@ -27,6 +27,8 @@ import static org.mockito.Mockito.when;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDate;
+
+import com.hdekker.calendarhome.oauth.Authentication;
 
 @ActiveProfiles("auth-system-test")
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
@@ -82,7 +84,7 @@ public class SecurityTest {
 	@Test
 	public void whenAuthorisationReceived_ExpectMarshalledToAuthorisationObject() {
 		
-		Authorisation auth = new Authorisation(code, state, Endpoints.authorisation);
+		Authorisation auth = new Authorisation(code, state);
 		assertThat(auth.code(), equalTo(code));
 		assertThat(auth.state(), equalTo(state));
 
@@ -92,7 +94,7 @@ public class SecurityTest {
 	AuthorisationPort authorisationPort;
 	
 	@Autowired
-	AccesTokenPort accessTokenPort;
+	AuthenticationPort authenticationPort;
 	
 
 	/**
@@ -110,14 +112,16 @@ public class SecurityTest {
 	@Test
 	public void givenAuthCode_ObtainsUserAccessInfo() throws URISyntaxException, InterruptedException {
 
-		log.info(authorisationPort.accesTokenPort.toString() + " used by auth port.");
+		log.info(authorisationPort.authenticationPort.toString() + " used by auth port.");
 		
-		when(accessTokenPort.getAccess(new Authorisation(code, state, Endpoints.authorisation)))
-			.thenReturn(Mono.just(new AccessToken("Random", "Me", "Some,Scopes", LocalDate.now())));
+		when(authenticationPort.getAuthentication(new Authorisation(code, state)))
+			.thenReturn(Mono.just(new Authentication(
+				new AccessToken("Random", "Me", "Some,Scopes", LocalDate.now()),
+				"hayden")));
 		
-		Mono<AccessToken> atMono = Mono.create(s->{
+		Mono<Authentication> atMono = Mono.create(s->{
 			
-			authorisationPort.listenForTokens(at->{
+			authorisationPort.listenForUserAuthentication(at->{
 				
 				log.info("Received an access token with token value - " + at.accessToken());
 				s.success(at);
@@ -129,11 +133,12 @@ public class SecurityTest {
 			
 		});
 		
-		AccessToken receivedAccessToken = atMono.take(Duration.ofSeconds(5))
+		Authentication receivedAuth = atMono.take(Duration.ofSeconds(5))
 				.publishOn(Schedulers.newBoundedElastic(10, 10, "auth-system-test"))
 				.block();
 		
-		assertThat(receivedAccessToken, notNullValue());
+		assertThat(receivedAuth, notNullValue());
+		assertThat(receivedAuth.username(), equalTo("hayden"));
 		
 	}
 	

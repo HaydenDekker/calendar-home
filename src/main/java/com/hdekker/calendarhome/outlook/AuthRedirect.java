@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.microsoft.aad.msal4j.AuthorizationRequestUrlParameters;
 import com.microsoft.aad.msal4j.Prompt;
-import com.microsoft.aad.msal4j.PublicClientApplication;
 import com.microsoft.aad.msal4j.ResponseMode;
 
 @Component

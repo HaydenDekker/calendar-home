@@ -8,5 +8,5 @@ package com.hdekker.calendarhome.oauth;
  * @author Hayden Dekker
  *
  */
-public record Authorisation (String code, String state, String currentURI) {}
+public record Authorisation (String code, String state) {}
 	

@@ -4,14 +4,9 @@ import java.net.MalformedURLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-
 import com.microsoft.aad.msal4j.ClientCredentialFactory;
 import com.microsoft.aad.msal4j.ConfidentialClientApplication;
-import com.microsoft.aad.msal4j.IClientCredential;
 import com.microsoft.aad.msal4j.IClientSecret;
-import com.microsoft.aad.msal4j.PublicClientApplication;
-
 import jakarta.annotation.PostConstruct;
 
 @Configuration

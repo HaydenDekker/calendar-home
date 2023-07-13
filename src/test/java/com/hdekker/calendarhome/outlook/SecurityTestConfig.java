@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
-import com.hdekker.calendarhome.oauth.AccesTokenPort;
+import com.hdekker.calendarhome.oauth.AuthenticationPort;
 
 @Profile("auth-system-test")
 @Configuration
@@ -14,8 +14,8 @@ public class SecurityTestConfig {
 
 	@Bean
 	@Primary
-	public AccesTokenPort getAuthPort() {
-		return Mockito.mock(AccesTokenPort.class);
+	public AuthenticationPort getAuthPort() {
+		return Mockito.mock(AuthenticationPort.class);
 	}
 	
 }

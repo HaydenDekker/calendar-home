@@ -1,6 +1,5 @@
 package com.hdekker.calendarhome.oauth;
 
-import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +25,13 @@ public class AuthorisationPort {
 	Logger log = LoggerFactory.getLogger(AuthorisationPort.class);
 	
 	@Autowired
-	public AccesTokenPort accesTokenPort;
+	public AuthenticationPort authenticationPort;
 	
 	public static final Integer MAX_WAITING_TIME_FOR_TOKEN = 5;
 	
 	public void getAccessTokens(Authorisation authorisation) {
-		try {
-			Mono<AccessToken> token = accesTokenPort.getAccess(authorisation);
+		
+			Mono<Authentication> token = authenticationPort.getAuthentication(authorisation);
 			token.timeout(Duration.ofSeconds(MAX_WAITING_TIME_FOR_TOKEN))
 				.subscribe(c->{
 					fire(c);
@@ -40,20 +39,15 @@ public class AuthorisationPort {
 					log.error(e.getLocalizedMessage());
 				}
 				);
-			
-		} catch (URISyntaxException e) {
-			log.error("URI Exception..");
-			// TODO manage error. Flag to user.
-		}
 	}
 
-	List<Consumer<AccessToken>> accessTokenListener = new ArrayList<>();
+	List<Consumer<Authentication>> accessTokenListener = new ArrayList<>();
 	
-	public void listenForTokens(Consumer<AccessToken> listener) {
+	public void listenForUserAuthentication(Consumer<Authentication> listener) {
 		accessTokenListener.add(listener);
 	}
 	
-	void fire(AccessToken at){
+	void fire(Authentication at){
 		log.info("Firing auth token events to " + accessTokenListener.size() + " listeners.");
 		accessTokenListener.forEach(c->c.accept(at));
 	}
