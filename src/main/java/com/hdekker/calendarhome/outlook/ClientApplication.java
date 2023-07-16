@@ -2,6 +2,8 @@ package com.hdekker.calendarhome.outlook;
 
 import java.net.MalformedURLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import com.microsoft.aad.msal4j.ClientCredentialFactory;
@@ -11,6 +13,8 @@ import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class ClientApplication {
+	
+	Logger log = LoggerFactory.getLogger(ClientApplication.class);
 
 	@Autowired
 	BasicConfiguration bc;

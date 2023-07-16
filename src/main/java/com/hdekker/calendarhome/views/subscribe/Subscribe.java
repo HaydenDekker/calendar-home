@@ -26,6 +26,7 @@ public class Subscribe extends VerticalLayout {
 	public Subscribe() {
 		
 		Button subscribe = new Button("subscribe");
+		subscribe.setId("subscribe");
 		add(subscribe);
 		
 		subscribe.addClickListener(s-> {

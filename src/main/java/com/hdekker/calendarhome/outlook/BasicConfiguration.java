@@ -3,8 +3,12 @@
 
 package com.hdekker.calendarhome.outlook;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import jakarta.annotation.PostConstruct;
 
 /**!
  * Object containing configuration data for the application. Spring will automatically wire the
@@ -70,5 +74,16 @@ class BasicConfiguration {
 
     public String getMsGraphEndpointHost(){
         return msGraphEndpointHost;
+    }
+    
+    Logger log = LoggerFactory.getLogger(BasicConfiguration.class);
+    
+    @PostConstruct
+    public void log() {
+    	
+    	log.info("SecretKey " + secretKey);
+    	log.info("Redirect " + redirectUriGraph);
+    	
+    	
     }
 }
