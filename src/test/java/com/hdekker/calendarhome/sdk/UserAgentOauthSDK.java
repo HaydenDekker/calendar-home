@@ -8,16 +8,64 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.hdekker.calendarhome.oauth.Authentication;
+import com.hdekker.calendarhome.oauth.AuthorisationPort;
+
+import jakarta.annotation.PostConstruct;
+import reactor.core.publisher.Mono;
+
 @Component
-public class UserAgentSDK {
+public class UserAgentOauthSDK {
 
 	@Autowired
 	WebDriver webDriver;
 	
+	Logger log = LoggerFactory.getLogger(UserAgentOauthSDK.class);
+	
 	public static Integer TIME_OUT = 10;
+	
+	WebDriverWait wdw;
+	
+	Authentication authentication;
+	
+	@Autowired
+	AuthorisationPort authorisationPort;
+
+	public Authentication getAuthentication() {
+		return authentication;
+	}
+
+	public void setAuthentication(Authentication authentication) {
+		this.authentication = authentication;
+	}
+
+	public Authentication loginUser(String microSoftAccount, String microsoftAccountPassword) {
+		Mono<Authentication> auth =  Mono.create(s->{
+			
+			authorisationPort.listenForUserAuthentication(a->{
+				log.info("Authentication successful " + a.accessToken());
+				s.success(a);
+			});
+			
+			openSubscribe();
+			clickSubscribe();
+			enterUserEmailAndPasswordToMicrosoftOauth(microSoftAccount, microsoftAccountPassword);
+			
+		});
+		Authentication res = auth.timeout(Duration.ofSeconds(20))
+					.block();
+		return res;
+	}
+	
+	@PostConstruct
+	public void init() {
+		wdw = new WebDriverWait(webDriver, Duration.ofSeconds(TIME_OUT));
+	}
 	
 	public void openSubscribe() {
 		
@@ -25,7 +73,6 @@ public class UserAgentSDK {
 		
 		webDriver.get("https://localhost:8080/subscribe");
 		
-		WebDriverWait wdw = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		wdw.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#subscribe")));
 		
 		
@@ -41,7 +88,7 @@ public class UserAgentSDK {
 	
 	}
 	
-	public void clickSubscribe() {
+	private void clickSubscribe() {
 		
 		webDriver.findElement(By.cssSelector("#subscribe")).click();
 		
@@ -55,10 +102,23 @@ public class UserAgentSDK {
 		return "input[value='" + typeAttributeValue + "']";
 	}
 	
-	public void enterUserEmailAndPasswordToMicrosoftOauth(String microSoftAccount, CharSequence microsoftAccountPassword) {
+	private void optionallyAgreeToPermissions() {
 		
-		WebDriverWait wdw = new WebDriverWait(webDriver, Duration.ofSeconds(TIME_OUT));
+		try {
+			wdw.until(ExpectedConditions.elementToBeClickable(By.cssSelector(getInputTagWithValueAttributeValue("Accept"))));
+			webDriver.findElement(By.cssSelector(getInputTagWithValueAttributeValue("Accept")))
+				.click();
+			
+		}catch(Exception e) {
+			log.info("Must have already agreed to permissions.");
+		
+		}
+		
+	}
 	
+	private void enterUserEmailAndPasswordToMicrosoftOauth(String microSoftAccount, CharSequence microsoftAccountPassword) {
+		
+		
 		By emailSelector = By.cssSelector(getInputTagWithTypeAttributeValue("email"));
 		wdw.until(ExpectedConditions.elementToBeClickable(emailSelector));
 		 
@@ -78,10 +138,7 @@ public class UserAgentSDK {
 		webDriver.findElement(By.cssSelector(getInputTagWithTypeAttributeValue("button")))
 			.click();
 		
-		// Then allow access to the information.
-		wdw.until(ExpectedConditions.elementToBeClickable(By.cssSelector(getInputTagWithValueAttributeValue("Accept"))));
-		webDriver.findElement(By.cssSelector(getInputTagWithValueAttributeValue("Accept")))
-			.click();
+		optionallyAgreeToPermissions();
 		
 		
 	}

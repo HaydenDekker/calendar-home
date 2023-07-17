@@ -2,8 +2,6 @@ package com.hdekker.calendarhome.outlook;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.Duration;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -15,9 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 import com.hdekker.calendarhome.oauth.Authentication;
 import com.hdekker.calendarhome.oauth.AuthorisationPort;
-import com.hdekker.calendarhome.sdk.UserAgentSDK;
-
-import reactor.core.publisher.Mono;
+import com.hdekker.calendarhome.sdk.UserAgentOauthSDK;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class SecurityIntegrationTest {
@@ -31,7 +27,7 @@ public class SecurityIntegrationTest {
 	public String microsoftAccountPassword;
 
 	@Autowired
-	UserAgentSDK userAgentSDK;
+	UserAgentOauthSDK userAgentSDK;
 	
 	@Autowired
 	AuthorisationPort authorisationPort;
@@ -42,26 +38,10 @@ public class SecurityIntegrationTest {
 		
 		log.info("Using account " + microSoftAccount);
 		
-		Mono<Authentication> auth = Mono.create(s->{
-			
-			authorisationPort.listenForUserAuthentication(a->{
-				log.info("Authentication successful " + a.accessToken());
-				s.success(a);
-			});
-			
-			userAgentSDK.openSubscribe();
-			userAgentSDK.clickSubscribe();
-			userAgentSDK.enterUserEmailAndPasswordToMicrosoftOauth(microSoftAccount, microsoftAccountPassword);
-			
-		
-		});
-		
-		Authentication res = auth
-				.timeout(Duration.ofSeconds(20))
-				.block();
-		
-		assertThat(res).isNotNull();
-		assertThat(res.accessToken()).isNotNull();
+		Authentication auth = userAgentSDK.loginUser(microSoftAccount, microsoftAccountPassword);
+
+		assertThat(auth).isNotNull();
+		assertThat(auth.accessToken()).isNotNull();
 	}
 	
 }
