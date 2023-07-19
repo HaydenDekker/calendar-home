@@ -119,6 +119,8 @@ public class SecurityTest {
 
 		log.info(authenticationService.authenticationPort.toString() + " used by auth port.");
 		
+		// TODO disable other downstream listeners for this test.
+		
 		when(authenticationPort.getAuthentication(new Authorisation(code, state)))
 			.thenReturn(Mono.just(new Authentication(
 				new AccessToken("Random", "Me", "Some,Scopes", LocalDate.now()),

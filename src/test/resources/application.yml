@@ -7,6 +7,3 @@ test:
       # M.C105_BAY.2.9561f489-28e7-e342-a443-e11f5e179474
       state: 7af249ed-9724-4d5c-b737-f1a8428c5bb2
     redirect-url: https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize
-  microsoft:
-    user: ${MICROSOFT_TEST_USER}
-    password: ${MICROSOFT_TEST_USER_PASSWORD}

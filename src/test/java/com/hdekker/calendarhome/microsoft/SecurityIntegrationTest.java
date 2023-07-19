@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.hdekker.calendarhome.oauth.Authentication;
 import com.hdekker.calendarhome.oauth.AuthorisationSubmissionUseCase;
 import com.hdekker.calendarhome.sdk.UserAgentOauthSDK;
 
 @DirtiesContext
+@ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class SecurityIntegrationTest {
 	

@@ -1,0 +1,4 @@
+test:
+  microsoft:
+    user: ${MICROSOFT_TEST_USER}
+    password: ${MICROSOFT_TEST_USER_PASSWORD}
