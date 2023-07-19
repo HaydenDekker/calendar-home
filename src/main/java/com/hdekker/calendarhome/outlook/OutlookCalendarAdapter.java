@@ -1,5 +1,7 @@
 package com.hdekker.calendarhome.outlook;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -41,11 +43,17 @@ public class OutlookCalendarAdapter implements CalendarPort {
 				.events()
 				.buildRequest()
 				.get();
+		  
+		  DateTimeFormatter dtf = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 				
 		  List<CalendarEvent> events = res.getCurrentPage()
 				.stream()
 				.map(e-> {
-					return new CalendarEvent(e.subject, e.body.content);
+					return new CalendarEvent(
+							e.subject, 
+							e.body.content, 
+							LocalDateTime.parse(e.start.dateTime),
+							LocalDateTime.parse(e.end.dateTime));
 				})
 				.collect(Collectors.toList());
 		  
