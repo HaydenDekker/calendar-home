@@ -13,7 +13,7 @@ public class StandardAuthorisationAdapter {
 	Logger log = LoggerFactory.getLogger(StandardAuthorisationAdapter.class);
 	
 	@Autowired
-	AuthorisationPort authorisationPort;
+	AuthorisationSubmissionUseCase authorisationSubmissionUseCase;
 
 	@GetMapping(path = "/calendar-auth-resp")
 	public void receiveAuthorisation(
@@ -22,7 +22,7 @@ public class StandardAuthorisationAdapter {
 			) {
 		
 		log.info("Obtaining access tokens.");
-		authorisationPort.getAccessTokens(new Authorisation(code, state));
+		authorisationSubmissionUseCase.submit(new Authorisation(code, state));
 		
 	}
 	

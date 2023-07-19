@@ -1,4 +1,4 @@
-package com.hdekker.calendarhome.outlook;
+package com.hdekker.calendarhome.microsoft;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -9,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.hdekker.calendarhome.oauth.AuthenticationPort;
+import com.hdekker.calendarhome.oauth.AuthenticationService;
+import com.hdekker.calendarhome.microsoft.AuthRedirect;
+import com.hdekker.calendarhome.microsoft.AuthValidation;
 import com.hdekker.calendarhome.oauth.AccessToken;
 import com.hdekker.calendarhome.oauth.Authorisation;
-import com.hdekker.calendarhome.oauth.AuthorisationPort;
+import com.hdekker.calendarhome.oauth.AuthorisationSubmissionUseCase;
 import com.hdekker.calendarhome.sdk.AuthCodeSupplier;
 
 import reactor.core.publisher.Mono;
@@ -30,6 +34,7 @@ import java.time.LocalDate;
 
 import com.hdekker.calendarhome.oauth.Authentication;
 
+@DirtiesContext
 @ActiveProfiles("auth-system-test")
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class SecurityTest {
@@ -91,10 +96,10 @@ public class SecurityTest {
 	}
 	
 	@Autowired
-	AuthorisationPort authorisationPort;
+	AuthenticationPort authenticationPort;
 	
 	@Autowired
-	AuthenticationPort authenticationPort;
+	AuthenticationService	authenticationService;
 	
 
 	/**
@@ -112,7 +117,7 @@ public class SecurityTest {
 	@Test
 	public void givenAuthCode_ObtainsUserAccessInfo() throws URISyntaxException, InterruptedException {
 
-		log.info(authorisationPort.authenticationPort.toString() + " used by auth port.");
+		log.info(authenticationService.authenticationPort.toString() + " used by auth port.");
 		
 		when(authenticationPort.getAuthentication(new Authorisation(code, state)))
 			.thenReturn(Mono.just(new Authentication(
@@ -121,7 +126,7 @@ public class SecurityTest {
 		
 		Mono<Authentication> atMono = Mono.create(s->{
 			
-			authorisationPort.listenForUserAuthentication(at->{
+			authenticationService.listenForUserAuthentication(at->{
 				
 				log.info("Received an access token with token value - " + at.accessToken());
 				s.success(at);

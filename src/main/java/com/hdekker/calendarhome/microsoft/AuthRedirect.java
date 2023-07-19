@@ -1,7 +1,9 @@
-package com.hdekker.calendarhome.outlook;
+package com.hdekker.calendarhome.microsoft;
 
 import java.net.MalformedURLException;
 import java.util.Collections;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,19 +33,20 @@ public class AuthRedirect {
 		
 	}
 	
+	public static Set<String> scopes = Set.of("Calendars.Read", "openid", "profile");
+	
 	@Autowired
 	ClientApplication clientApplication;
 	
 	private String getAuthorizationCodeUrl(String registeredRedirectURL, String state, String nonce)
             throws MalformedURLException {
 
-        String updatedScopes = "";
         String claims = "";
 
         AuthorizationRequestUrlParameters parameters =
                 AuthorizationRequestUrlParameters
                         .builder(registeredRedirectURL,
-                                Collections.singleton(updatedScopes))
+                                scopes)
                         .responseMode(ResponseMode.QUERY)
                         .prompt(Prompt.SELECT_ACCOUNT)
                         .state(state)

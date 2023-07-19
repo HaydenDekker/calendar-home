@@ -1,4 +1,4 @@
-package com.hdekker.calendarhome.outlook;
+package com.hdekker.calendarhome.microsoft;
 
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;

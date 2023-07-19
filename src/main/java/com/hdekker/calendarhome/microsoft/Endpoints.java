@@ -1,4 +1,4 @@
-package com.hdekker.calendarhome.outlook;
+package com.hdekker.calendarhome.microsoft;
 
 public class Endpoints {
 

@@ -12,34 +12,28 @@ import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Mono;
 
-/***
- * 
- * Manage incoming authorisation tokens
- * 
- * @author Hayden Dekker
- *
- */
 @Service
-public class AuthorisationPort {
+public class AuthenticationService{
 	
-	Logger log = LoggerFactory.getLogger(AuthorisationPort.class);
+	Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 	
 	@Autowired
 	public AuthenticationPort authenticationPort;
 	
 	public static final Integer MAX_WAITING_TIME_FOR_TOKEN = 5;
 	
-	public void getAccessTokens(Authorisation authorisation) {
+	public void authenticate(Authorisation authorisation) {
 		
-			Mono<Authentication> token = authenticationPort.getAuthentication(authorisation);
-			token.timeout(Duration.ofSeconds(MAX_WAITING_TIME_FOR_TOKEN))
-				.subscribe(c->{
-					fire(c);
-				}, e->{
-					log.error(e.getLocalizedMessage());
-				}
-				);
+		Mono<Authentication> token = authenticationPort.getAuthentication(authorisation);
+		token.timeout(Duration.ofSeconds(MAX_WAITING_TIME_FOR_TOKEN))
+			.subscribe(c->{
+				fire(c);
+			}, e->{
+				log.error(e.getLocalizedMessage());
+			}
+			);
 	}
+	
 
 	List<Consumer<Authentication>> accessTokenListener = new ArrayList<>();
 	
@@ -51,5 +45,6 @@ public class AuthorisationPort {
 		log.info("Firing auth token events to " + accessTokenListener.size() + " listeners.");
 		accessTokenListener.forEach(c->c.accept(at));
 	}
+
 	
 }

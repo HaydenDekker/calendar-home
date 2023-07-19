@@ -1,4 +1,4 @@
-package com.hdekker.calendarhome.outlook;
+package com.hdekker.calendarhome.microsoft;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,6 +32,7 @@ public class AuthenticationAdapter implements AuthenticationPort {
 			parameters = AuthorizationCodeParameters.builder(
 			        authorisation.code(),
 			        new URI(Endpoints.authorisation))
+					.scopes(AuthRedirect.scopes)
 			        .build();
 		} catch (URISyntaxException e) {
 			log.error("Should never happen.");

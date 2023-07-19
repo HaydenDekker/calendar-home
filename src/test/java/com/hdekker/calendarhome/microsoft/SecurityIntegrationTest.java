@@ -1,4 +1,4 @@
-package com.hdekker.calendarhome.outlook;
+package com.hdekker.calendarhome.microsoft;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,35 +10,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.hdekker.calendarhome.oauth.Authentication;
-import com.hdekker.calendarhome.oauth.AuthorisationPort;
+import com.hdekker.calendarhome.oauth.AuthorisationSubmissionUseCase;
 import com.hdekker.calendarhome.sdk.UserAgentOauthSDK;
 
+@DirtiesContext
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class SecurityIntegrationTest {
 	
 	Logger log = LoggerFactory.getLogger(SecurityIntegrationTest.class);
-	
-	@Value("${test.microsoft.user}")
-	public String microSoftAccount;
-	
-	@Value("${test.microsoft.password}")
-	public String microsoftAccountPassword;
 
 	@Autowired
 	UserAgentOauthSDK userAgentSDK;
 	
 	@Autowired
-	AuthorisationPort authorisationPort;
+	AuthorisationSubmissionUseCase authorisationPort;
 	
 	@Test
 	@DisplayName("Can automate user agent to obtain authentication")
 	public void automatesUserAgentAuthentication() throws InterruptedException {
 		
-		log.info("Using account " + microSoftAccount);
-		
-		Authentication auth = userAgentSDK.loginUser(microSoftAccount, microsoftAccountPassword);
+		Authentication auth = userAgentSDK.loginUser();
 
 		assertThat(auth).isNotNull();
 		assertThat(auth.accessToken()).isNotNull();

@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.hdekker.calendarhome.outlook.Endpoints;
+import com.hdekker.calendarhome.microsoft.Endpoints;
 
 import reactor.core.publisher.Mono;
 

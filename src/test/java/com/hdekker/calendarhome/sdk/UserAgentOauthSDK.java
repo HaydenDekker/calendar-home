@@ -11,10 +11,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.hdekker.calendarhome.oauth.Authentication;
-import com.hdekker.calendarhome.oauth.AuthorisationPort;
+import com.hdekker.calendarhome.oauth.AuthenticationService;
+import com.hdekker.calendarhome.oauth.AuthorisationSubmissionUseCase;
 
 import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
@@ -34,7 +36,13 @@ public class UserAgentOauthSDK {
 	Authentication authentication;
 	
 	@Autowired
-	AuthorisationPort authorisationPort;
+	AuthenticationService authenticationService;
+	
+	@Value("${test.microsoft.user}")
+	public String microSoftAccount;
+	
+	@Value("${test.microsoft.password}")
+	public String microsoftAccountPassword;
 
 	public Authentication getAuthentication() {
 		return authentication;
@@ -44,10 +52,13 @@ public class UserAgentOauthSDK {
 		this.authentication = authentication;
 	}
 
-	public Authentication loginUser(String microSoftAccount, String microsoftAccountPassword) {
+	public Authentication loginUser() {
+		
+		log.info("Using account " + microSoftAccount);
+		
 		Mono<Authentication> auth =  Mono.create(s->{
 			
-			authorisationPort.listenForUserAuthentication(a->{
+			authenticationService.listenForUserAuthentication(a->{
 				log.info("Authentication successful " + a.accessToken());
 				s.success(a);
 			});
