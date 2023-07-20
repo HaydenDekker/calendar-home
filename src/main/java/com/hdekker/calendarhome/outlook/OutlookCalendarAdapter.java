@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import com.hdekker.calendarhome.ApplicationProfiles;
 import com.hdekker.calendarhome.oauth.Authentication;
 import com.microsoft.graph.requests.CalendarCollectionPage;
 import com.microsoft.graph.requests.EventCollectionPage;
@@ -18,6 +20,7 @@ import com.microsoft.graph.requests.GraphServiceClient;
 import okhttp3.Request;
 
 @Component
+@Profile(ApplicationProfiles.PRODUCTION_ENV)
 public class OutlookCalendarAdapter implements CalendarPort {
 
 	Logger log = LoggerFactory.getLogger(OutlookCalendarAdapter.class);

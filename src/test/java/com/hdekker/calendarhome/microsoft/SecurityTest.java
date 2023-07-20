@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.hdekker.calendarhome.oauth.AuthenticationPort;
 import com.hdekker.calendarhome.oauth.AuthenticationService;
+import com.hdekker.calendarhome.TestProfiles;
 import com.hdekker.calendarhome.microsoft.AuthRedirect;
 import com.hdekker.calendarhome.microsoft.AuthValidation;
 import com.hdekker.calendarhome.oauth.AccessToken;
@@ -35,7 +36,7 @@ import java.time.LocalDate;
 import com.hdekker.calendarhome.oauth.Authentication;
 
 @DirtiesContext
-@ActiveProfiles("auth-system-test")
+@ActiveProfiles({TestProfiles.AUTH_SYSTEM, TestProfiles.SYSTEM})
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class SecurityTest {
 	

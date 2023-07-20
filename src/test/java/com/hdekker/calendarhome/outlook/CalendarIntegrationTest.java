@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.hdekker.calendarhome.ApplicationProfiles;
+import com.hdekker.calendarhome.TestProfiles;
 import com.hdekker.calendarhome.sdk.UserAgentOauthSDK;
 
 import reactor.core.publisher.Mono;
@@ -24,7 +26,7 @@ import reactor.core.publisher.Mono;
  *
  */
 @DirtiesContext
-@ActiveProfiles("integration")
+@ActiveProfiles({ApplicationProfiles.PRODUCTION_ENV, TestProfiles.INTEGRATION})
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class CalendarIntegrationTest {
 	

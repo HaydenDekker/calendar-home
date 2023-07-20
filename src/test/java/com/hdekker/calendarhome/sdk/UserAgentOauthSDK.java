@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.hdekker.calendarhome.TestProfiles;
 import com.hdekker.calendarhome.oauth.Authentication;
 import com.hdekker.calendarhome.oauth.AuthenticationService;
 import com.hdekker.calendarhome.oauth.AuthorisationSubmissionUseCase;
@@ -24,7 +25,7 @@ import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
 @Component
-@Profile("integration")
+@Profile(TestProfiles.INTEGRATION)
 public class UserAgentOauthSDK {
 
 	@Autowired

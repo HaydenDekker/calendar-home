@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.hdekker.calendarhome.sdk.UserAgentOauthSDK;
 
 @DirtiesContext
-@ActiveProfiles("integration")
+@ActiveProfiles({ApplicationProfiles.PRODUCTION_ENV, TestProfiles.INTEGRATION})
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class BaseSeleniumTest {
 
