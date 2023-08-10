@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.hdekker.calendarhome.ApplicationProfiles;
 import com.hdekker.calendarhome.TestProfiles;
+import com.hdekker.calendarhome.sdk.CalendarUISDK;
 import com.hdekker.calendarhome.sdk.UserAgentOauthSDK;
 
 import reactor.core.publisher.Mono;
@@ -38,7 +39,10 @@ public class CalendarIntegrationTest {
 	@Autowired
 	CalendarEventStream calendarEventStream;
 	
-	// TODO this is the calendate display use case.
+	@Autowired
+	CalendarUISDK calendarUISDK;
+	
+	// TODO this is the calendar display use case.
 	@Test
 	public void obtainTestUserCalendarEntries() {
 		
@@ -53,12 +57,18 @@ public class CalendarIntegrationTest {
 			userAgentOauthSDK.loginUser();
 			
 		})
+		// TODO blocking in login stops this from occuring
 		.timeout(Duration.ofSeconds(30))
 		.block();
 		
 		assertThat(res).isNotNull();
 		assertThat(res.subject()).contains("Test1");
 		
+		calendarUISDK.openCalendar();
+		
+		String calendarItemContent = calendarUISDK.checkEventBySubjectExists(res.subject());
+		
+		assertThat(calendarItemContent.concat(res.subject()));
 		
 		
 	}

@@ -1,7 +1,6 @@
 package com.hdekker.calendarhome.microsoft;
 
 import java.net.MalformedURLException;
-import java.util.Collections;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;

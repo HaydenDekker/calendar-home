@@ -17,8 +17,12 @@ public class AuthenticationEntity {
     @Id
     private String username;
 
+    @Column(length = 10000)
     private String accessToken;
+    
+    @Column(length = 10000)
     private String idToken;
+    
     private String scopes;
 
     @Column(name = "expires_on")

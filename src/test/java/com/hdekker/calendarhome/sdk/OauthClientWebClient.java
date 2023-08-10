@@ -1,5 +1,7 @@
 package com.hdekker.calendarhome.sdk;
 
+import javax.net.ssl.SSLException;
+
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,9 +23,16 @@ public class OauthClientWebClient {
 	public Builder testClient() {
 		// Create a custom HttpClient with trust for self-signed certificates
 	    HttpClient httpClient = HttpClient.create()
-	            .secure(sslContextSpec -> sslContextSpec.sslContext(
-	                    SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
-	            ));
+	            .secure(sslContextSpec -> {
+					try {
+						sslContextSpec.sslContext(
+						        SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build()
+						);
+					} catch (SSLException e) {
+						
+						e.printStackTrace();
+					}
+				});
 	
 	    // Create a WebClient with the custom HttpClient
 	    return WebClient.builder()

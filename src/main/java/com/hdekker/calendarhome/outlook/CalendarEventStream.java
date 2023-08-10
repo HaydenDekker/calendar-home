@@ -7,8 +7,6 @@ import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.azure.core.annotation.Post;
-import com.hdekker.calendarhome.oauth.AuthenticationPort;
 import com.hdekker.calendarhome.oauth.AuthenticationService;
 
 import jakarta.annotation.PostConstruct;

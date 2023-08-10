@@ -14,13 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.ActiveProfiles;
-
 import com.hdekker.calendarhome.TestProfiles;
 import com.hdekker.calendarhome.oauth.Authentication;
 import com.hdekker.calendarhome.oauth.AuthenticationService;
-import com.hdekker.calendarhome.oauth.AuthorisationSubmissionUseCase;
-
 import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
@@ -146,6 +142,7 @@ public class UserAgentOauthSDK {
 		webDriver.findElement(passwordSelector).sendKeys(microsoftAccountPassword);
 		
 		//submit
+		wdw.until(ExpectedConditions.elementToBeClickable(By.cssSelector(getInputTagWithTypeAttributeValue("submit"))));
 		webDriver.findElement(By.cssSelector(getInputTagWithTypeAttributeValue("submit")))
 			.click();
 		

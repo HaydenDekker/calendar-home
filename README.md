@@ -19,7 +19,6 @@ Authorisation UseCase -
 
 OutlookMonitor UseCase -
 
-- Can retrieve user info from Microsoft graph.
 - (Complete) Can retrieve user calendar events from Microsoft graph.
 - (Complete) Order events by date.
 

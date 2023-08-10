@@ -23,12 +23,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.hdekker.calendarhome.TestProfiles;
-import com.hdekker.calendarhome.database.auth.AuthenticationRepository;
 import com.hdekker.calendarhome.oauth.AccessToken;
 import com.hdekker.calendarhome.oauth.Authentication;
 import com.hdekker.calendarhome.oauth.AuthenticationDeletionPort;
 import com.hdekker.calendarhome.oauth.AuthenticationLookupPort;
-import com.hdekker.calendarhome.oauth.AuthenticationPersistancePort;
 import com.hdekker.calendarhome.oauth.AuthenticationPort;
 import com.hdekker.calendarhome.oauth.AuthenticationService;
 import com.hdekker.calendarhome.oauth.Authorisation;
