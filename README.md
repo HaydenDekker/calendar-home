@@ -1,6 +1,8 @@
 # Calendar Home
 
-Aims to connect many user accounts to a single client and consumer calendar events aggregating to a single display.
+Combine your Microsoft calendar with family or friends in a single web UI.
+
+Aims to connect multiple user accounts to a single client and consume calendar events, aggregating the calendar events to a single user interface.
 
 ## Functions / Tests
 

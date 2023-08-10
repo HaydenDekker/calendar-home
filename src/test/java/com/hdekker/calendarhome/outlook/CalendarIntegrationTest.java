@@ -15,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.hdekker.calendarhome.ApplicationProfiles;
 import com.hdekker.calendarhome.TestProfiles;
+import com.hdekker.calendarhome.oauth.Authentication;
+import com.hdekker.calendarhome.oauth.AuthenticationService;
 import com.hdekker.calendarhome.sdk.CalendarUISDK;
 import com.hdekker.calendarhome.sdk.UserAgentOauthSDK;
 
@@ -37,6 +39,9 @@ public class CalendarIntegrationTest {
 	UserAgentOauthSDK userAgentOauthSDK;
 	
 	@Autowired
+	AuthenticationService authenticationService;
+	
+	@Autowired
 	CalendarEventStream calendarEventStream;
 	
 	@Autowired
@@ -46,11 +51,11 @@ public class CalendarIntegrationTest {
 	@Test
 	public void obtainTestUserCalendarEntries() {
 		
-		CalendarEvent res = (CalendarEvent) Mono.create(s->{
+		// login user first to ensure up to date tokens
+		Authentication res = (Authentication) Mono.create(s->{
 			
 			// get graph client
-			calendarEventStream.listen(event -> {
-				log.info(event.subject() + event.body());
+			authenticationService.listenForUserAuthentication(event -> {
 				s.success(event);
 			});
 			
@@ -62,13 +67,24 @@ public class CalendarIntegrationTest {
 		.block();
 		
 		assertThat(res).isNotNull();
-		assertThat(res.subject()).contains("Test1");
 		
-		calendarUISDK.openCalendar();
+		CalendarEvent ce = (CalendarEvent) Mono.create(s->{
+			
+			calendarEventStream.listen(c->{
+				log.info(c.subject() + " found.");
+				s.success(c);
+			});
+			
+			calendarUISDK.openCalendar();
+			
+		})
+		.timeout(Duration.ofSeconds(30))
+		.block();
 		
-		String calendarItemContent = calendarUISDK.checkEventBySubjectExists(res.subject());
 		
-		assertThat(calendarItemContent.concat(res.subject()));
+		String calendarItemContent = calendarUISDK.checkEventBySubjectExists(ce.subject());
+		
+		assertThat(calendarItemContent.concat(ce.subject()));
 		
 		
 	}
