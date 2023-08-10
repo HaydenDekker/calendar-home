@@ -38,6 +38,7 @@ public class CalendarIntegrationTest {
 	@Autowired
 	CalendarEventStream calendarEventStream;
 	
+	// TODO this is the calendate display use case.
 	@Test
 	public void obtainTestUserCalendarEntries() {
 		
@@ -57,6 +58,8 @@ public class CalendarIntegrationTest {
 		
 		assertThat(res).isNotNull();
 		assertThat(res.subject()).contains("Test1");
+		
+		
 		
 	}
 	

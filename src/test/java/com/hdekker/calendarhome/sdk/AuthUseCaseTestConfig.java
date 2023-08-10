@@ -1,4 +1,4 @@
-package com.hdekker.calendarhome.microsoft;
+package com.hdekker.calendarhome.sdk;
 
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,7 @@ import com.hdekker.calendarhome.oauth.AuthenticationPort;
 
 @Profile(TestProfiles.AUTH_SYSTEM)
 @Configuration
-public class SecurityTestConfig {
+public class AuthUseCaseTestConfig {
 
 	@Bean
 	@Primary

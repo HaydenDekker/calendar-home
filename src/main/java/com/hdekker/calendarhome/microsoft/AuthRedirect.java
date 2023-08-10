@@ -7,12 +7,13 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.hdekker.calendarhome.UseCase;
 import com.microsoft.aad.msal4j.AuthorizationRequestUrlParameters;
 import com.microsoft.aad.msal4j.Prompt;
 import com.microsoft.aad.msal4j.ResponseMode;
 
 @Component
-public class AuthRedirect {
+public class AuthRedirect implements UseCase {
 
 	public final String redirectURL = "https://localhost:8080/calendar-auth-resp";
 	

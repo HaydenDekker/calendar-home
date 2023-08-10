@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hdekker.calendarhome.UseCase;
+
 import reactor.core.publisher.Mono;
 
 /***
@@ -20,7 +22,7 @@ import reactor.core.publisher.Mono;
  *
  */
 @Service
-public class AuthorisationSubmissionUseCase {
+public class AuthorisationSubmissionUseCase implements UseCase {
 	
 	Logger log = LoggerFactory.getLogger(AuthorisationSubmissionUseCase.class);
 	

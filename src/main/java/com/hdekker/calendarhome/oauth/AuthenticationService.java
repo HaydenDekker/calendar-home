@@ -20,14 +20,21 @@ public class AuthenticationService{
 	@Autowired
 	public AuthenticationPort authenticationPort;
 	
+	@Autowired
+	AuthenticationPersistancePort authenticationPersistancePort;
+	
 	public static final Integer MAX_WAITING_TIME_FOR_TOKEN = 5;
 	
 	public void authenticate(Authorisation authorisation) {
 		
 		Mono<Authentication> token = authenticationPort.getAuthentication(authorisation);
 		token.timeout(Duration.ofSeconds(MAX_WAITING_TIME_FOR_TOKEN))
-			.subscribe(c->{
-				fire(c);
+			.subscribe(auth->{
+				
+				log.info("Persisting authentication for " + auth.username());
+				authenticationPersistancePort.persist(auth);
+				fire(auth);
+				
 			}, e->{
 				log.error(e.getLocalizedMessage());
 			}

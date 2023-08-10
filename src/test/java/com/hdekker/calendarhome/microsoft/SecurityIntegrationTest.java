@@ -37,9 +37,9 @@ public class SecurityIntegrationTest {
 	public void automatesUserAgentAuthentication() throws InterruptedException {
 		
 		Authentication auth = userAgentSDK.loginUser();
-
 		assertThat(auth).isNotNull();
 		assertThat(auth.accessToken()).isNotNull();
+		
 	}
 	
 }

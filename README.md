@@ -4,23 +4,26 @@ Aims to connect many user accounts to a single client and consumer calendar even
 
 ## Functions / Tests
 
-SecurityTest - 
+Redirect UseCase - 
 
 - (Complete) Redirect user to Microsoft OAuth server.
+
+Authorisation UseCase -
+
 - (Complete) Receive Microsoft OAuth Authorisation codes.
 - (Complete) Marshal Authorisation Response to Authorisation object.
 - (Complete) Request User info and Tokens; Access and Refresh.
-- Set access tokens that app should utilise.
+- (Complete) Saves user authorisation tokens
 - Detect failure if access token no longer valid.
-- Get refresh if failure occurs.
-- Call with refresh is failure occurs.
+- Attempt refresh if failure occurs.
 
-OutlookMonitorTest -
+OutlookMonitor UseCase -
 
 - Can retrieve user info from Microsoft graph.
-- Can retrieve user calendar events from Microsoft graph.
+- (Complete) Can retrieve user calendar events from Microsoft graph.
+- (Complete) Order events by date.
 
-UITest
+UI Test
 
 - Display list of calendar events in date order.
 
