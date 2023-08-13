@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hdekker.calendarhome.UseCase;
 import com.hdekker.calendarhome.oauth.AuthenticationLookupPort;
 import com.hdekker.calendarhome.oauth.AuthenticationService;
 
@@ -16,7 +17,7 @@ import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
 @Service
-public class CalendarEventStream {
+public class CalendarEventStream implements UseCase{
 	
 	Logger log = LoggerFactory.getLogger(CalendarEventStream.class);
 	

@@ -22,4 +22,10 @@ public class TestProfiles {
 	 */
 	public static final String SYSTEM = "system";
 	
+	/***
+	 * For tools that serve dummy data to
+	 * the UI for development review
+	 * 
+	 */
+	public static final String UI = "ui";
 }

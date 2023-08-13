@@ -19,12 +19,16 @@ Authorisation UseCase -
 - Detect failure if access token no longer valid.
 - Attempt refresh if failure occurs.
 
-OutlookMonitor UseCase -
+CalendarEventStream UseCase -
 
 - (Complete) Can retrieve user calendar events from Microsoft graph.
 - (Complete) Order events by date.
+- Can listen for new events
 
 UI Test
 
-- Display list of calendar events in date order.
+- (Complete) Display list of calendar events.
+- Order in date order.
+- Removes any duplication if the same event it pushed twice.
+- Display, subject, description, date time start
 
