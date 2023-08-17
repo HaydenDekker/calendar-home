@@ -1,5 +1,6 @@
 package com.hdekker.calendarhome.views;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -19,12 +20,16 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hdekker.calendarhome.TestProfiles;
 import com.hdekker.calendarhome.oauth.AccessToken;
 import com.hdekker.calendarhome.oauth.Authentication;
 import com.hdekker.calendarhome.outlook.CalendarEvent;
 import com.hdekker.calendarhome.outlook.CalendarEventStream;
 import com.hdekker.calendarhome.sdk.WebDriverConfig;
+import com.microsoft.graph.models.Location;
+import com.microsoft.graph.models.PhysicalAddress;
 
 /***
  * Mocks calendar event stream for UI
@@ -46,12 +51,27 @@ public class CalendarUITest {
 	CalendarEventStream calendarEventStream;
 	
 	public CalendarEvent testEvent() {
+		
+		ObjectMapper om = new ObjectMapper();
+		
+		Location pa = null;
+		
+		try {
+			pa = om.readValue("{\"address\":{\"city\":\"Melbourne\"}}", Location.class);
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		assertThat(pa.address.city).isEqualTo("Melbourne");
+		
 		return new CalendarEvent(
 				// TODO do I really need this Auth in calendar....
 				new Authentication(
 						new AccessToken("SDD", "SDDF", "DFCF", LocalDate.now()),
 						"HAppy ayden"), 
 				"Subject Test", "This is what you should display",
+				pa,
 				LocalDateTime.now(),
 				LocalDateTime.now().plusDays(1));
 	}

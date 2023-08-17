@@ -14,8 +14,8 @@ public class CalendarEventListSorterEvent {
 	@Test
 	public void sortsByDate() {
 		
-		CalendarEvent ce1 = new CalendarEvent(null, "Yippee", "Yes", LocalDateTime.now(), LocalDateTime.now().plusHours(1));
-		CalendarEvent ce2 = new CalendarEvent(null, "Yippee", "Yes", LocalDateTime.now().minusHours(5), LocalDateTime.now().minusHours(4));
+		CalendarEvent ce1 = new CalendarEvent(null, "Yippee", "Yes", null, LocalDateTime.now(), LocalDateTime.now().plusHours(1));
+		CalendarEvent ce2 = new CalendarEvent(null, "Yippee", "Yes", null, LocalDateTime.now().minusHours(5), LocalDateTime.now().minusHours(4));
 		
 		List<CalendarEvent> events = List.of(ce1, ce2);
 		

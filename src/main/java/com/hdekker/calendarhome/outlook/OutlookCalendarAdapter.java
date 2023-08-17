@@ -51,7 +51,8 @@ public class OutlookCalendarAdapter implements CalendarPort {
 					return new CalendarEvent(
 							authentication,
 							e.subject, 
-							e.body.content, 
+							e.body.content,
+							e.location,
 							LocalDateTime.parse(e.start.dateTime),
 							LocalDateTime.parse(e.end.dateTime));
 				})
