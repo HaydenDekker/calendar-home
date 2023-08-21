@@ -1,0 +1,14 @@
+.calendar-event{
+	
+	width: 100%;
+	box-shadow: black 1px 1px 3px -1px;
+	
+}
+
+.calendar-event-subject-header{
+	
+	width: 100%;
+    justify-content: space-between;
+    align-items: baseline;
+    
+}

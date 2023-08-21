@@ -7,10 +7,12 @@ import com.hdekker.calendarhome.outlook.CalendarEventStream;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
@@ -26,10 +28,6 @@ public class CalendarUI extends VerticalLayout implements AfterNavigationObserve
 	
 	public CalendarUI() {
 		
-		H2 title = new H2("Calendar"); 
-		add(title);
-		title.setId("view-title");
-		
 		ceLayout = new VerticalLayout();
 		add(ceLayout);
 		
@@ -38,20 +36,24 @@ public class CalendarUI extends VerticalLayout implements AfterNavigationObserve
 	Component createCalendarCard(CalendarEvent ce) {
 		
 		VerticalLayout cdDiv = new VerticalLayout();
-		cdDiv.add(new H3(ce.subject()));
+		HorizontalLayout hl = new HorizontalLayout();
+		cdDiv.add(hl);
 		cdDiv.add(new Label(ce.body()));
-		cdDiv.add(new Label(ce.location().address.city));
+//		cdDiv.add(new Label(ce.location().address.city));
 		
 		DateTimePicker dtpStartTime = new DateTimePicker();
 		dtpStartTime.setValue(ce.startTime());
 		dtpStartTime.setReadOnly(true);
-		cdDiv.add(dtpStartTime);
 		
-		DateTimePicker dtpFinishTime = new DateTimePicker();
-		dtpFinishTime.setValue(ce.finishTime());
-		dtpFinishTime.setReadOnly(true);
-		cdDiv.add(dtpFinishTime);
+		hl.add(new H3(ce.subject()));
+		hl.add(dtpStartTime);
 		
+//		DateTimePicker dtpFinishTime = new DateTimePicker();
+//		dtpFinishTime.setValue(ce.finishTime());
+//		dtpFinishTime.setReadOnly(true);
+//		cdDiv.add(dtpFinishTime);
+		
+		hl.addClassName("calendar-event-subject-header");
 		cdDiv.setClassName("calendar-event");
 		
 		return cdDiv;

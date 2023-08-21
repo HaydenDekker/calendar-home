@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +51,7 @@ public class CalendarUITest {
 	@Autowired
 	CalendarEventStream calendarEventStream;
 	
-	public CalendarEvent testEvent() {
+	public List<CalendarEvent> testEvents() {
 		
 		ObjectMapper om = new ObjectMapper();
 		
@@ -65,15 +66,32 @@ public class CalendarUITest {
 		
 		assertThat(pa.address.city).isEqualTo("Melbourne");
 		
-		return new CalendarEvent(
-				// TODO do I really need this Auth in calendar....
-				new Authentication(
-						new AccessToken("SDD", "SDDF", "DFCF", LocalDate.now()),
-						"HAppy ayden"), 
-				"Subject Test", "This is what you should display",
-				pa,
-				LocalDateTime.now(),
-				LocalDateTime.now().plusDays(1));
+		return List.of(
+				
+				new CalendarEvent(
+					// TODO do I really need this Auth in calendar....
+					new Authentication(
+							new AccessToken("SDD", "SDDF", "DFCF", LocalDate.now()),
+							"HAppy ayden"), 
+					"Subject Test", "This is what you should display",
+					pa,
+					LocalDateTime.now(),
+					LocalDateTime.now().plusDays(1)),
+				new CalendarEvent(
+						// TODO do I really need this Auth in calendar....
+						new Authentication(
+								new AccessToken("SDD", "SDDF", "DFCF", LocalDate.now()),
+								"HAppy ayden"), 
+						"Ahh yesh", "Must have to..",
+						pa,
+						LocalDateTime.now(),
+						LocalDateTime.now().plusDays(1))
+				
+				
+		
+		);
+		
+		
 	}
 	
 	@Test
@@ -83,7 +101,7 @@ public class CalendarUITest {
 		doAnswer(inv->{
 			
 			Consumer<CalendarEvent> eventConsumer = inv.getArgument(0);
-			eventConsumer.accept(testEvent());
+			testEvents().forEach(ce->eventConsumer.accept(ce));
 			return null;
 			
 		}).when(calendarEventStream)
@@ -102,7 +120,7 @@ public class CalendarUITest {
 		doAnswer(inv->{
 			
 			Consumer<CalendarEvent> eventConsumer = inv.getArgument(0);
-			eventConsumer.accept(testEvent());
+			testEvents().forEach(ce->eventConsumer.accept(ce));
 			return null;
 			
 		}).when(calendarEventStream)
