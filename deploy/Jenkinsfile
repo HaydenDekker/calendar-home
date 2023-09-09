@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment {
+        SSH_CREDENTIALS = credentials('06375e47-11d5-49ee-a096-94ba50ba035e') 
+        // Replace with your SSH credentials ID - non root - 6b4b4214-61f8-4328-a565-f14961fb227c
+        REMOTE_SERVER = '192.168.8.99'                   // Replace with your remote server hostname or IP
+    
+    }
+    tools {
+        maven 'MavenHayden'
+        jdk 'JDK17'
+    }
+    stages {
+        stage('Checkout') {
+          steps {
+            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/HaydenDekker/calendar-home/']])
+          }
+        }
+        
+        stage('Check Custom Script Existence') {
+            steps {
+                script {
+                    def scriptPath = '/var/deploy/setenv.sh'  // Adjust the path to your custom script
+                    if (!fileExists(scriptPath)) {
+                        error("Custom script does not exist at path: ${scriptPath}. Pipeline failed.")
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Compile Java source files
+                sh 'java --version'
+                sh 'mvn --version'
+                sh '${MAVEN_HOME}/bin/mvn clean package -DskipTests -Pproduction'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo "Password from credential: \${PASSWORD_CREDENTIAL}"
+                sh 'cp ./target/calendarhome*.jar /var/deploy'
+                sh 'chmod 777 /var/deploy/calendarhome*.jar'
+                sshagent(credentials: ['6b4b4214-61f8-4328-a565-f14961fb227c']) {
+                        // Execute SSH commands on the remote server
+                        sh """
+                        ssh -v -o StrictHostKeyChecking=no -l hayden ${REMOTE_SERVER} "sudo systemctl start calendar.service"
+                        ssh -v -o StrictHostKeyChecking=no -l hayden ${REMOTE_SERVER} '~/Documents/auto/deploy/setenv.sh'
+                        """
+                    }
+            }
+        }
+    }
+}

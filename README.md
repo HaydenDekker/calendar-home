@@ -30,5 +30,16 @@ UI Test
 - (Complete) Display list of calendar events.
 - Order in date order.
 - Removes any duplication if the same event it pushed twice.
-- Display, subject, description, date time start
+- (Complete) Display subject, description, date time start
+
+CI/CD
+
+- deploy/jenkins/dockerfile - adds java 17 to the jenkins image to allow maven to build this app
+	need to run this manually on the server to create the image.
+- deploy/jenkins/docker-compose.yaml - boots the jenkins image build manually above (need to set image name in this file) use docker-compose up to manually start this on the target server.
+- deploy/calendar.service - Jenkins pipeline adds this to the server with each build to control the calendar service.
+- deploy/setenv.sh - Jenkins pipline calls this each build to configure the server env with the new build.
+- deploy/Jenkinsfile - File defining jenkins pipeline.
+
+
 
