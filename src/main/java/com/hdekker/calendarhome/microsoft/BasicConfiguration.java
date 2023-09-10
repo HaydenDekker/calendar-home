@@ -5,6 +5,7 @@ package com.hdekker.calendarhome.microsoft;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,8 @@ class BasicConfiguration {
     private String authority;
     private String redirectUriSignin;
     private String redirectUriGraph;
+    
+    @Value("${APP_SECRET_KEY}")
     private String secretKey;
     private String msGraphEndpointHost;
 
