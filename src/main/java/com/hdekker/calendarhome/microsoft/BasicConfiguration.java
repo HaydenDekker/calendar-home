@@ -25,11 +25,24 @@ class BasicConfiguration {
     @Value("${APP_REDIRECT_URI_SIGNIN}")
     private String redirectUriSignin;
     
+    @Value("${APP_REDIRECT_URL_SIGNIN_SUCCESS}")
+    private String redirectURLSigninSuccess;
+    
     @Value("${APP_SECRET_KEY}")
     private String secretKey;
     private String msGraphEndpointHost;
+    
+    
 
-    public String getAuthority(){
+    public String getRedirectURLSigninSuccess() {
+		return redirectURLSigninSuccess;
+	}
+
+	public void setRedirectURLSigninSuccess(String redirectURLSigninSuccess) {
+		this.redirectURLSigninSuccess = redirectURLSigninSuccess;
+	}
+
+	public String getAuthority(){
         if (!authority.endsWith("/")) {
             authority += "/";
         }

@@ -24,6 +24,8 @@ public class StandardAuthorisationAdapter {
 		log.info("Obtaining access tokens.");
 		authorisationSubmissionUseCase.submit(new Authorisation(code, state));
 		
+		
+		
 	}
 	
 }

@@ -14,13 +14,14 @@ import com.microsoft.aad.msal4j.ResponseMode;
 @Component
 public class AuthRedirect implements UseCase {
 
-	public final String redirectURL = "https://localhost:8080/calendar-auth-resp";
+	@Autowired
+	BasicConfiguration baseBasicConfiguration;
 	
 	public String redirectForAuthentication(AuthValidation authValidation) {
 		
 		try {
 			String authorizationCodeUrl = getAuthorizationCodeUrl(
-					redirectURL,
+					baseBasicConfiguration.getRedirectUriSignin(),
 					authValidation.getState(), 
 					authValidation.getNonce());
 			return authorizationCodeUrl;
