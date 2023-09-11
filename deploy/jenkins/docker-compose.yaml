@@ -4,6 +4,7 @@ services:
   jenkins:
     image: j-jenkins-02
     privileged: true
+    restart: always
     user: root
     ports:
       - 8080:8080
@@ -13,3 +14,11 @@ services:
       - /home/hayden/jenkins_compose/jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/hayden/Documents/auto/deploy:/var/deploy
+  calendar-postgres:
+    image: postgres
+    container_name: calendar-postgres
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    restart: always

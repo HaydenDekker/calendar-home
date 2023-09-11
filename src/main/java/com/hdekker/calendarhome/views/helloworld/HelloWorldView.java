@@ -12,7 +12,6 @@ import com.vaadin.flow.router.RouteAlias;
 
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
 public class HelloWorldView extends HorizontalLayout {
 
     private static final long serialVersionUID = 5186083714615429898L;

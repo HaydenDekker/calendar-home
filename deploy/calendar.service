@@ -3,6 +3,7 @@ Description=Calendar Home
 
 [Service]
 User=hayden
+EnvironmentFile=/etc/environment
 ExecStart=/usr/bin/java -jar /home/hayden/Documents/auto/deploy/calendarhome.jar
  --server.port=8081
 WorkingDirectory=/home/hayden/Documents/auto/deploy

@@ -1,9 +1,13 @@
 package com.hdekker.calendarhome.views.calendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.hdekker.calendarhome.outlook.CalendarEvent;
 import com.hdekker.calendarhome.outlook.CalendarEventStream;
+import com.hdekker.calendarhome.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
@@ -17,10 +21,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 
 @Route("calendar")
+@RouteAlias(value = "")
 public class CalendarUI extends VerticalLayout implements AfterNavigationObserver{
 
+	Logger log = LoggerFactory.getLogger(CalendarUI.class);
+	
 	@Autowired
 	CalendarEventStream calendarEventStream;
 	
@@ -62,7 +70,7 @@ public class CalendarUI extends VerticalLayout implements AfterNavigationObserve
 
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
-		
+
 		calendarEventStream.listen(ce->{
 			
 			Component cdDiv = createCalendarCard(ce);

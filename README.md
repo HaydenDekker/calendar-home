@@ -41,5 +41,9 @@ CI/CD
 - deploy/setenv.sh - Jenkins pipline calls this each build to configure the server env with the new build.
 - deploy/Jenkinsfile - File defining jenkins pipeline.
 
+Manual Tasks
+
+- Add secrets to hosts /etc/environment file that is used by calendar.service
+
 
 
