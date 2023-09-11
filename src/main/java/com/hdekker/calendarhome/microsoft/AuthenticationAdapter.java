@@ -24,6 +24,9 @@ public class AuthenticationAdapter implements AuthenticationPort {
 	ClientApplication ca;
 	
 	Logger log = LoggerFactory.getLogger(AuthenticationAdapter.class);
+	
+	@Autowired
+	BasicConfiguration basicConfiguration;
 
 	public Mono<Authentication> getAuthentication(Authorisation authorisation){
 		
@@ -31,7 +34,8 @@ public class AuthenticationAdapter implements AuthenticationPort {
 		try {
 			parameters = AuthorizationCodeParameters.builder(
 			        authorisation.code(),
-			        new URI(Endpoints.authorisation))
+			        // TODO should the uri be passed like this...?
+			        new URI(basicConfiguration.getRedirectUriSignin()))
 					.scopes(AuthRedirect.scopes)
 			        .build();
 		} catch (URISyntaxException e) {

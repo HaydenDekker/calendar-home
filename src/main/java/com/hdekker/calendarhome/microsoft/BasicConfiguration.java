@@ -31,8 +31,6 @@ class BasicConfiguration {
     @Value("${APP_SECRET_KEY}")
     private String secretKey;
     private String msGraphEndpointHost;
-    
-    
 
     public String getRedirectURLSigninSuccess() {
 		return redirectURLSigninSuccess;
