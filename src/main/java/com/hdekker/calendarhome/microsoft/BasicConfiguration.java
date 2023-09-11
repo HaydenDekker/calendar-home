@@ -22,7 +22,7 @@ class BasicConfiguration {
     private String clientId;
     private String authority;
     
-    @Value("${APP_REDIRECT_URI_SIGNIN}")
+    @Value("${APP_REDIRECT_URL_SIGNIN}")
     private String redirectUriSignin;
     
     @Value("${APP_REDIRECT_URL_SIGNIN_SUCCESS}")
