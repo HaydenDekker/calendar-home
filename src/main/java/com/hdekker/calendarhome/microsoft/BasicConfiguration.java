@@ -17,7 +17,7 @@ import jakarta.annotation.PostConstruct;
  */
 @Component
 @ConfigurationProperties("aad")
-class BasicConfiguration {
+public class BasicConfiguration {
 
     private String clientId;
     private String authority;

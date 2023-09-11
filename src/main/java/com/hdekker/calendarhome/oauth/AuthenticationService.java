@@ -1,5 +1,7 @@
 package com.hdekker.calendarhome.oauth;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriBuilderFactory;
+
+import com.hdekker.calendarhome.microsoft.BasicConfiguration;
 
 import reactor.core.publisher.Mono;
 
@@ -23,22 +30,38 @@ public class AuthenticationService{
 	@Autowired
 	AuthenticationPersistancePort authenticationPersistancePort;
 	
-	public static final Integer MAX_WAITING_TIME_FOR_TOKEN = 5;
+	@Autowired
+	BasicConfiguration basicConfiguration;
 	
-	public void authenticate(Authorisation authorisation) {
+	public static final Integer MAX_WAITING_TIME_FOR_TOKEN = 5;
+
+
+	public Mono<URI> authenticate(Authorisation authorisation) {
 		
-		Mono<Authentication> token = authenticationPort.getAuthentication(authorisation);
-		token.timeout(Duration.ofSeconds(MAX_WAITING_TIME_FOR_TOKEN))
-			.subscribe(auth->{
-				
-				log.info("Persisting authentication for " + auth.username());
-				authenticationPersistancePort.persist(auth);
-				fire(auth);
-				
-			}, e->{
-				log.error(e.getLocalizedMessage());
-			}
-			);
+		return Mono.create(sink->{
+			Mono<Authentication> token = authenticationPort.getAuthentication(authorisation);
+			token.timeout(Duration.ofSeconds(MAX_WAITING_TIME_FOR_TOKEN))
+				.subscribe(auth->{
+					
+					log.info("Persisting authentication for " + auth.username());
+					authenticationPersistancePort.persist(auth);
+					fire(auth);
+					URI uri = null;
+					try {
+						uri = new URI(basicConfiguration.getRedirectURLSigninSuccess());
+					} catch (URISyntaxException e) {
+						log.error("The configured URL is not conformant to the URI object.");
+					}
+					
+					sink.success(uri);
+					
+				}, e->{
+					log.error(e.getLocalizedMessage());
+				}
+				);
+		});
+		
+		
 	}
 	
 
