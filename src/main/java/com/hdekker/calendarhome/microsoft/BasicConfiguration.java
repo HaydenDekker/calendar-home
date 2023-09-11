@@ -21,8 +21,9 @@ class BasicConfiguration {
 
     private String clientId;
     private String authority;
+    
+    @Value("${APP_REDIRECT_URI_SIGNIN}")
     private String redirectUriSignin;
-    private String redirectUriGraph;
     
     @Value("${APP_SECRET_KEY}")
     private String secretKey;
@@ -55,13 +56,6 @@ class BasicConfiguration {
         this.redirectUriSignin = redirectUriSignin;
     }
 
-    public String getRedirectUriGraph() {
-        return redirectUriGraph;
-    }
-
-    public void setRedirectUriGraph(String redirectUriGraph) {
-        this.redirectUriGraph = redirectUriGraph;
-    }
 
     public String getSecretKey() {
         return secretKey;
@@ -85,7 +79,7 @@ class BasicConfiguration {
     public void log() {
     	
     	log.info("SecretKey " + secretKey);
-    	log.info("Redirect " + redirectUriGraph);
+    	log.info("Redirect " + redirectUriSignin);
     	
     	
     }

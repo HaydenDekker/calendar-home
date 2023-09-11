@@ -44,6 +44,8 @@ CI/CD
 Manual Tasks
 
 - Add secrets to hosts /etc/environment file that is used by calendar.service
+  - APP_REDIRECT_URI_SIGNIN - redirection uri to be provided to auth server.
+  - APP_SECRET_KEY - secret key of auth server.
 
 
 
