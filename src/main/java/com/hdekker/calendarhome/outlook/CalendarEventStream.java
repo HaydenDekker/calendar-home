@@ -28,8 +28,22 @@ public class CalendarEventStream implements UseCase{
 		refreshAll();
 	}
 	
+	List<Consumer<CalendarEvent>> forRemoval = new ArrayList<>();
+	
 	public void fireEvent(CalendarEvent event) {
-		consumers.forEach(c -> c.accept(event));
+		
+		consumers.forEach(c -> {
+			try {
+				c.accept(event);
+			} catch (Exception e) {
+				log.debug("Removing listener due to client error.");
+				forRemoval.add(c);
+			}
+		});
+		
+		forRemoval.forEach(c->consumers.remove(c));
+		forRemoval.clear();
+		
 	}
 	
 	@Autowired
@@ -41,6 +55,7 @@ public class CalendarEventStream implements UseCase{
 	public void refreshAll() {
 		
 		Mono.create(s->{
+			
 			authenticationLookupPort.allAuthentication()
 				.stream()
 				.peek(c-> log.info("Getting auth for " + c.username()))
@@ -48,6 +63,7 @@ public class CalendarEventStream implements UseCase{
 					calendarPort.getEvents(c)
 						.forEach(ce->fireEvent(ce));
 				});
+			
 		})
 		.subscribe();
 		

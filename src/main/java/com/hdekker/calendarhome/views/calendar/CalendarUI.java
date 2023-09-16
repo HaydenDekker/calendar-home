@@ -46,7 +46,7 @@ public class CalendarUI extends VerticalLayout implements AfterNavigationObserve
 		VerticalLayout cdDiv = new VerticalLayout();
 		HorizontalLayout hl = new HorizontalLayout();
 		cdDiv.add(hl);
-		cdDiv.add(new Label(ce.body()));
+		//cdDiv.add(new Label(ce.body()));
 //		cdDiv.add(new Label(ce.location().address.city));
 		
 		DateTimePicker dtpStartTime = new DateTimePicker();

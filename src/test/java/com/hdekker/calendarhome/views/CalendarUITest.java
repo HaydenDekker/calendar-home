@@ -128,19 +128,8 @@ public class CalendarUITest {
 		
 		WebDriver webDriver = config.getWebDriver();
 		webDriver.get("https://localhost:8080/calendar");
-		
-		// TODO when in CI noone will be able to manually close...
-		// Can CI ignore test profiles UI?
-		while(getWindowHandle(webDriver)!=null) {
-			Thread.sleep(1000);
-		}
-		
+	
 		Thread.sleep(100);
-		
-		// TODO continue, may have to make sleep long to design with dummy data....
-		// or could wait for manual close....
-		
-		
 		
 	}
 	

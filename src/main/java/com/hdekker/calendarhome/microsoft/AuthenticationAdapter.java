@@ -14,6 +14,7 @@ import com.hdekker.calendarhome.oauth.Authentication;
 import com.hdekker.calendarhome.oauth.AuthenticationPort;
 import com.hdekker.calendarhome.oauth.Authorisation;
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
+import com.microsoft.aad.msal4j.ITokenCacheAccessAspect;
 
 import reactor.core.publisher.Mono;
 
@@ -42,7 +43,6 @@ public class AuthenticationAdapter implements AuthenticationPort {
 			log.error("Should never happen.");
 		}
 
-
 		return Mono.fromCompletionStage(ca.getClientApplication()
     		.acquireToken(parameters)
     		.thenApply(ar-> {
@@ -51,7 +51,8 @@ public class AuthenticationAdapter implements AuthenticationPort {
 				log.info("User Acc " + ar.account().username());
     			
         		return new Authentication(
-        				new AccessToken(ar.accessToken(),
+        				new AccessToken(
+        					ar.accessToken(),
 	        				ar.idToken(), 
 	        				ar.scopes(),
 	        				ar.expiresOnDate()
