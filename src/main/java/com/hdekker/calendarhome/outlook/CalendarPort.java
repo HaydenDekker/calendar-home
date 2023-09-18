@@ -12,6 +12,10 @@ import com.hdekker.calendarhome.oauth.Authentication;
  */
 public interface CalendarPort {
 
-	List<CalendarEvent> getEvents(Authentication authentication);
+	public static class AuthException extends Exception{
+		
+	}
+	
+	List<CalendarEvent> getEvents(Authentication authentication) throws AuthException;
 	
 }

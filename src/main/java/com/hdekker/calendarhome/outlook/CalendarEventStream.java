@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hdekker.calendarhome.UseCase;
+import com.hdekker.calendarhome.microsoft.AuthenticationRefreshService;
 import com.hdekker.calendarhome.oauth.AuthenticationLookupPort;
 import com.hdekker.calendarhome.oauth.AuthenticationService;
+import com.hdekker.calendarhome.outlook.CalendarPort.AuthException;
 
 import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
@@ -52,6 +54,9 @@ public class CalendarEventStream implements UseCase{
 	@Autowired
 	AuthenticationLookupPort authenticationLookupPort;
 	
+	@Autowired
+	AuthenticationRefreshService authenticationRefreshService;
+	
 	public void refreshAll() {
 		
 		Mono.create(s->{
@@ -60,8 +65,24 @@ public class CalendarEventStream implements UseCase{
 				.stream()
 				.peek(c-> log.info("Getting auth for " + c.username()))
 				.forEach(c->{
-					calendarPort.getEvents(c)
-						.forEach(ce->fireEvent(ce));
+					try {
+						calendarPort.getEvents(c)
+							.forEach(ce->fireEvent(ce));
+					} catch (AuthException e) {
+						authenticationRefreshService.refreshToken(c)
+							.subscribe(auth->{
+							try {
+								calendarPort.getEvents(c)
+									.forEach(ce->fireEvent(ce));
+							} catch (AuthException e1) {
+								
+								e1.printStackTrace();
+								log.error("Another auth error occured while trying with refreshed token.");
+							}
+							}, (err)->{
+								log.error("Couldn't get refreshed auth.");
+							});
+					}
 				});
 			
 		})

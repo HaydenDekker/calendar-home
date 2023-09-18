@@ -15,6 +15,8 @@ import reactor.core.publisher.Mono;
  * 
  * Manage incoming authorisation tokens
  * 
+ * TODO merge with AuthenticationService
+ * 
  * @author Hayden Dekker
  *
  */

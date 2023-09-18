@@ -24,7 +24,7 @@ public class OutlookCalendarAdapter implements CalendarPort {
 	Logger log = LoggerFactory.getLogger(OutlookCalendarAdapter.class);
 	
 	@Override
-	public List<CalendarEvent> getEvents(Authentication authentication) {
+	public List<CalendarEvent> getEvents(Authentication authentication) throws AuthException {
 		
 		GraphServiceClient<Request> client = GraphServiceClient.builder()
 			.authenticationProvider(url-> {
@@ -40,10 +40,16 @@ public class OutlookCalendarAdapter implements CalendarPort {
 			})
 			.buildClient();
 		
-		  EventCollectionPage res = client.me()
+		EventCollectionPage res = null;
+		try {
+		
+		  res = client.me()
 				.events()
 				.buildRequest()
 				.get();
+		} catch (Exception e) {
+			throw new AuthException();
+		}
 		  
 		  List<CalendarEvent> events = res.getCurrentPage()
 				.stream()
