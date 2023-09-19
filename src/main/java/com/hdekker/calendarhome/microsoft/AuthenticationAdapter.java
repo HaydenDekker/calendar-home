@@ -14,6 +14,7 @@ import com.hdekker.calendarhome.oauth.Authentication;
 import com.hdekker.calendarhome.oauth.AuthenticationPort;
 import com.hdekker.calendarhome.oauth.Authorisation;
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
+import com.microsoft.aad.msal4j.IAuthenticationResult;
 import com.microsoft.aad.msal4j.ITokenCacheAccessAspect;
 
 import reactor.core.publisher.Mono;
@@ -28,6 +29,20 @@ public class AuthenticationAdapter implements AuthenticationPort {
 	
 	@Autowired
 	BasicConfiguration basicConfiguration;
+	
+	public static Authentication convert(IAuthenticationResult result) {
+		return new Authentication(
+				new AccessToken(
+    					result.accessToken(),
+        				result.idToken(), 
+        				result.scopes(),
+        				result.expiresOnDate()
+        					.toInstant()
+        					.atZone(ZoneId.systemDefault())
+        					.toLocalDate()),
+    				result.account().username()
+    				);
+	}
 
 	public Mono<Authentication> getAuthentication(Authorisation authorisation){
 		
@@ -50,16 +65,7 @@ public class AuthenticationAdapter implements AuthenticationPort {
 				log.info("Obtained access token.");
 				log.info("User Acc " + ar.account().username());
     			
-        		return new Authentication(
-        				new AccessToken(
-        					ar.accessToken(),
-	        				ar.idToken(), 
-	        				ar.scopes(),
-	        				ar.expiresOnDate()
-	        					.toInstant()
-	        					.atZone(ZoneId.systemDefault())
-	        					.toLocalDate()),
-        				ar.account().username());
+        		return convert(ar);
         		
     		}));
 	}

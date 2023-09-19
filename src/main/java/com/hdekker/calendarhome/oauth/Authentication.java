@@ -1,7 +1,8 @@
 package com.hdekker.calendarhome.oauth;
 
 public record Authentication(
-		AccessToken accessToken, 
-		String username) {
+		AccessToken accessToken,
+		String username
+		) {
 
 }
