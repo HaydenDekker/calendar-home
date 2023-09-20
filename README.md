@@ -16,8 +16,8 @@ Authorisation UseCase -
 - (Complete) Marshal Authorisation Response to Authorisation object.
 - (Complete) Request User info and Tokens; Access and Refresh.
 - (Complete) Saves user authorisation tokens
-- Detect failure if access token no longer valid.
-- Attempt refresh if failure occurs.
+- (Complete) Detect failure if access token no longer valid.
+- (Complete) Attempt refresh if failure occurs.
 
 CalendarEventStream UseCase -
 
@@ -30,7 +30,9 @@ UI Test
 - (Complete) Display list of calendar events.
 - Order in date order.
 - Removes any duplication if the same event it pushed twice.
-- (Complete) Display subject, description, date time start
+- (Complete) Display subject, description, date time start.
+- Display notification if user account can be accessed.
+- Allow user to un-subscribe from application.
 
 CI/CD
 
@@ -41,7 +43,7 @@ CI/CD
 - deploy/setenv.sh - Jenkins pipline calls this each build to configure the server env with the new build.
 - deploy/Jenkinsfile - File defining jenkins pipeline.
 
-Manual Tasks
+Environment Manual Tasks
 
 - Add secrets to hosts /etc/environment file that is used by calendar.service
   - APP_REDIRECT_URI_SIGNIN - redirection uri to be provided to auth server.
