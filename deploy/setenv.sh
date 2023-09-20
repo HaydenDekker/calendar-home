@@ -15,16 +15,13 @@ else
   echo "no file exists"
 fi
 
-files=$(find ./ -type f -name "*.jar")
+# Finds the latest jar available
+files=$(find ./versions -type f -name "*.jar" -exec ls -t {} + | head -n 1)
 echo "$files"
 num_files=$(echo "$files" | wc -l)
 echo "$num_files"
 
-if [ "$num_files" -gt 1 ]; then
- echo "too many jars" >&2
- exit 1
-fi
-
+# Replace the jar used by the system service
 cp $(echo "$files" | head -n 1) "$calendar_home_path"
 
 sudo systemctl start calendar.service
