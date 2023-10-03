@@ -72,7 +72,7 @@ public class CalendarEventStream implements UseCase{
 						authenticationRefreshService.refreshToken(c)
 							.subscribe(auth->{
 							try {
-								calendarPort.getEvents(c)
+								calendarPort.getEvents(auth)
 									.forEach(ce->fireEvent(ce));
 							} catch (AuthException e1) {
 								

@@ -129,7 +129,7 @@ public class CalendarUITest {
 		WebDriver webDriver = config.getWebDriver();
 		webDriver.get("https://localhost:8080/calendar");
 	
-		Thread.sleep(100);
+		Thread.sleep(300000);
 		
 	}
 	
