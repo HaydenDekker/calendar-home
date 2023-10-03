@@ -60,7 +60,10 @@ public class MicrosoftAuthenticationRefreshAdapter implements AuthenticationRefr
 					return Mono.fromCompletionStage(clientApplication.getClientApplication()
 							.acquireTokenSilently(sp))
 							.doOnNext(r->{
-								log.info("Result found for " + r.account().username());
+								log.info("Result found for " + r.account().username() + " " + r.accessToken());
+								if(r.accessToken().equals(authentication.accessToken().accessToken())) {
+									log.warn("Access token refresh requested but token returned was the same.");
+								}
 							});
 				} catch (MalformedURLException e) {
 					
