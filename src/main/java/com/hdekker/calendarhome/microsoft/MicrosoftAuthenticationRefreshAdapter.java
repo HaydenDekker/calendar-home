@@ -14,6 +14,7 @@ import com.hdekker.calendarhome.oauth.Authentication;
 import com.microsoft.aad.msal4j.IAccount;
 import com.microsoft.aad.msal4j.SilentParameters;
 
+import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -60,7 +61,7 @@ public class MicrosoftAuthenticationRefreshAdapter implements AuthenticationRefr
 					return Mono.fromCompletionStage(clientApplication.getClientApplication()
 							.acquireTokenSilently(sp))
 							.doOnNext(r->{
-								log.info("Result found for " + r.account().username() + " " + r.accessToken());
+								log.info("Result found for " + r.account().username() + " and access token " + r.accessToken());
 								if(r.accessToken().equals(authentication.accessToken().accessToken())) {
 									log.warn("Access token refresh requested but token returned was the same.");
 								}
@@ -73,6 +74,11 @@ public class MicrosoftAuthenticationRefreshAdapter implements AuthenticationRefr
 			})
 			.map(res-> AuthenticationAdapter.convert(res));
 
+	}
+	
+	@PostConstruct
+	public void init() {
+		log.info("Refresher started.");
 	}
 
 }

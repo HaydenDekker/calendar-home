@@ -6,7 +6,7 @@
     <groupId>com.hdekker.calendarhome</groupId>
     <artifactId>calendarhome</artifactId>
     <name>calendarhome</name>
-    <version>1.2</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <properties>
