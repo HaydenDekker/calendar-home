@@ -47,7 +47,6 @@ pipeline {
                 sshagent(credentials: ['6b4b4214-61f8-4328-a565-f14961fb227c']) {
                         // Execute SSH commands on the remote server
                         sh """
-                        // ssh -v -o StrictHostKeyChecking=no -l hayden ${REMOTE_SERVER} "sudo systemctl start calendar.service"
                         ssh -v -o StrictHostKeyChecking=no -l hayden ${REMOTE_SERVER} '~/Documents/auto/deploy/setenv.sh'
                         """
                     }
