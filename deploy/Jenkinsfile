@@ -40,14 +40,14 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Password from credential: \${PASSWORD_CREDENTIAL}"
-                sh 'cp ./target/calendarhome*.jar /var/deploy'
-                sh 'chmod 777 /var/deploy/calendarhome*.jar'
+                sh 'cp ./target/calendarhome*.jar /var/deploy/versions'
+                sh 'chmod 777 /var/deploy/versions/calendarhome*.jar'
                 sh 'cp ./deploy/setenv.sh /var/deploy'
                 sh 'chmod +x /var/deploy/setenv.sh'
                 sshagent(credentials: ['6b4b4214-61f8-4328-a565-f14961fb227c']) {
                         // Execute SSH commands on the remote server
                         sh """
-                        ssh -v -o StrictHostKeyChecking=no -l hayden ${REMOTE_SERVER} "sudo systemctl start calendar.service"
+                        // ssh -v -o StrictHostKeyChecking=no -l hayden ${REMOTE_SERVER} "sudo systemctl start calendar.service"
                         ssh -v -o StrictHostKeyChecking=no -l hayden ${REMOTE_SERVER} '~/Documents/auto/deploy/setenv.sh'
                         """
                     }
