@@ -1,8 +1,8 @@
 # Calendar Home
 
-Combine your Microsoft calendar with family or friends in a single web UI.
+Combine two Microsoft calendars into a single web UI.
 
-Aims to connect multiple user accounts to a single client and consume calendar events, aggregating the calendar events to a single user interface.
+Multiple user accounts can be connected to a single client that will consume calendar events, aggregating the calendar events to a single user interface.
 
 ## Functions / Tests
 
@@ -43,11 +43,11 @@ CI/CD
 - deploy/setenv.sh - Jenkins pipline calls this each build to configure the server env with the new build.
 - deploy/Jenkinsfile - File defining jenkins pipeline.
 
-Environment Manual Tasks
+Deployment Environment Manual Tasks
 
 - Add secrets to hosts /etc/environment file that is used by calendar.service
-  - APP_REDIRECT_URI_SIGNIN - redirection uri to be provided to auth server.
-  - APP_SECRET_KEY - secret key of auth server.
+- APP_REDIRECT_URI_SIGNIN - redirection uri to be provided to auth server.
+- APP_SECRET_KEY - secret key of auth server.
 
 
 

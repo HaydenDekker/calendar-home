@@ -15,8 +15,6 @@ import com.hdekker.calendarhome.oauth.AuthenticationPort;
 import com.hdekker.calendarhome.oauth.Authorisation;
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
 import com.microsoft.aad.msal4j.IAuthenticationResult;
-import com.microsoft.aad.msal4j.ITokenCacheAccessAspect;
-
 import reactor.core.publisher.Mono;
 
 @Component

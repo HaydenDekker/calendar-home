@@ -3,8 +3,6 @@ package com.hdekker.calendarhome.views;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,7 +27,6 @@ import com.hdekker.calendarhome.outlook.CalendarEvent;
 import com.hdekker.calendarhome.outlook.CalendarEventStream;
 import com.hdekker.calendarhome.sdk.WebDriverConfig;
 import com.microsoft.graph.models.Location;
-import com.microsoft.graph.models.PhysicalAddress;
 
 /***
  * Mocks calendar event stream for UI

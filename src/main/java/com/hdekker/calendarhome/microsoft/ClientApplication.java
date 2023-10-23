@@ -7,15 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-import com.hdekker.calendarhome.oauth.Authentication;
 import com.microsoft.aad.msal4j.ClientCredentialFactory;
 import com.microsoft.aad.msal4j.ConfidentialClientApplication;
 import com.microsoft.aad.msal4j.IClientSecret;
 import com.microsoft.aad.msal4j.ITokenCacheAccessAspect;
 import com.microsoft.aad.msal4j.ITokenCacheAccessContext;
-import com.microsoft.aad.msal4j.SilentParameters;
-import com.microsoft.aad.msal4j.SilentParameters.SilentParametersBuilder;
-
 import jakarta.annotation.PostConstruct;
 
 /***

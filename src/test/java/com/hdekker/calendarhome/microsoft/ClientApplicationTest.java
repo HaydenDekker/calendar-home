@@ -7,9 +7,6 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.base.Supplier;
 import com.microsoft.aad.msal4j.IAccount;
 import com.microsoft.aad.msal4j.ITokenCache;

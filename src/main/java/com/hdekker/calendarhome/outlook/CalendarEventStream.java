@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 import com.hdekker.calendarhome.UseCase;
 import com.hdekker.calendarhome.microsoft.AuthenticationRefreshService;
 import com.hdekker.calendarhome.oauth.AuthenticationLookupPort;
-import com.hdekker.calendarhome.oauth.AuthenticationService;
 import com.hdekker.calendarhome.outlook.CalendarPort.AuthException;
 
-import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
 @Service
